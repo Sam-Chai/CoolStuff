@@ -1,6 +1,5 @@
 package link.botwmcs.samchai.coolstuff.mixin.sleepskiptime;
 
-import link.botwmcs.samchai.coolstuff.util.SleepSkipTimeMath;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -28,7 +27,10 @@ import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import link.botwmcs.samchai.coolstuff.util.SleepSkipTimeMath;
+import static link.botwmcs.samchai.coolstuff.CoolStuff.LOGGER;
 import static link.botwmcs.samchai.coolstuff.util.SleepSkipTimeMath.DAY_LENGTH;
+import static link.botwmcs.samchai.coolstuff.CoolStuff.config;
 
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin extends Level {
@@ -50,8 +52,6 @@ public abstract class ServerLevelMixin extends Level {
 //    @Final
 //    protected Raids raids;
 
-    // @Shadow public abstract void levelEvent(@Nullable Player pPlayer, int pType, BlockPos pPos, int pData);
-
     protected ServerLevelMixin(WritableLevelData pLevelData,
                                ResourceKey<Level> pDimension,
                                Holder<DimensionType> pDimensionTypeRegistration,
@@ -60,10 +60,17 @@ public abstract class ServerLevelMixin extends Level {
                                boolean pIsDebug,
                                long pBiomeZoomSeed) {
         super(pLevelData, pDimension, pDimensionTypeRegistration, pProfiler, pIsClientSide, pIsDebug, pBiomeZoomSeed);
-    }
 
+    }
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/GameRules;getInt(Lnet/minecraft/world/level/GameRules$Key;)I"))
     public void tickInject(BooleanSupplier shouldKeepTicking, CallbackInfo callbackInfo) {
+        // that's not working...
+//        // check if this module function is not true
+//        if (!config.sleepSkipTimeConfig.enableModule) {
+//            // nothing to do
+//            return;
+//        }
+
         // check if anyone is sleeping
         int sleepingPlayerCount = sleepStatus.amountSleeping();
         if (sleepingPlayerCount <= 0) {
@@ -74,10 +81,8 @@ public abstract class ServerLevelMixin extends Level {
         int playerCount = server.getPlayerCount();
         double sleepingRatio = (double) sleepingPlayerCount / playerCount;
         double sleepingPercentage = sleepingRatio * 100;
-        int nightTimeStepPerTick = SleepSkipTimeMath.calNightTimeStepPerTick(sleepingRatio, 25); // remember this multiplier need to config
-//        int blockEntityTickSpeedMultiplier = (int) Math.round((double) 25);
-//        int chunkTickSpeedMultiplier = (int) Math.round((double) 25);
-//        int raidTickSpeedMultiplier = (int) Math.round((double) 25);
+        int nightTimeStepPerTick = SleepSkipTimeMath.calNightTimeStepPerTick(sleepingRatio, config.sleepSkipTimeConfig.sleepSpeedMultiplier);
+
         boolean doDayLightCycle = server.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT);
         int playersRequiredToSleepPercentage = server.getGameRules().getInt(GameRules.RULE_PLAYERS_SLEEPING_PERCENTAGE);
         // 1.0 * gamerule: no loss of precision
@@ -122,8 +127,15 @@ public abstract class ServerLevelMixin extends Level {
                 // msg need i18n
                 if (serverLevelData.isThundering()) {
                     player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping through this thunderstorm (time until dawn: " + secondsUntilAwake + "s)"), true);
+                    if (config.sleepSkipTimeConfig.enableSleepingStatusLog) {
+                        LOGGER.info("[BotWMCS CollStuff - SleepSkipTime] " + sleepingPlayerCount + "/" + playerCount + " players are sleeping through this thunderstorm (time until dawn: " + secondsUntilAwake + "s)");
+                    }
                 } else {
                     player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping through this night (time until dawn: " + secondsUntilAwake + "s)"), true);
+                    if (config.sleepSkipTimeConfig.enableSleepingStatusLog) {
+                        LOGGER.info("[BotWMCS CollStuff - SleepSkipTime] " + sleepingPlayerCount + "/" + playerCount + " players are sleeping through this night (time until dawn: " + secondsUntilAwake + "s)");
+
+                    }
                 }
             }
         }
@@ -138,13 +150,13 @@ public abstract class ServerLevelMixin extends Level {
                 serverLevelData.setClearWeatherTime((int) (DAY_LENGTH * SleepSkipTimeMath.getRandomNumberInRange(0.5, 7.5)));
             }
 
-//            // Check if dawn message isn't set to nothing
-//            if (!config.dawnMessage.equals("")) {
-//                // Send HUD message to all players
-//                for (ServerPlayerEntity player : players) {
-//                    player.sendMessage(Text.of(config.dawnMessage), true);
-//                }
-//            }
+            for (ServerPlayer player : players) {
+                // i18n plz
+                player.displayClientMessage(Component.nullToEmpty("...Times to dawn..."), true);
+                if (config.sleepSkipTimeConfig.enableSleepingStatusLog) {
+                    LOGGER.info("[BotWMCS CollStuff - SleepSkipTime] ...Times to dawn...");
+                }
+            }
         }
     }
 

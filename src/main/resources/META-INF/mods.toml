@@ -56,3 +56,9 @@ A BotWMCS official mod that brings some cool stuff
    versionRange="[1.18.2,1.19)"
    ordering="NONE"
    side="BOTH"
+[[dependencies.CoolStuff]]
+   modId="cloth-config"
+   mandatory=true
+   versionRange="[5.3.63,)"
+   ordering="NONE"
+   side="BOTH"
