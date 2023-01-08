@@ -2,7 +2,7 @@
 BotWMCS official mod. Brings some coolstuff works.
 
 Ready to do:
-- Multi-home support (include multiple respawn place when dead)
+- Multi-home support (include multiple & chooseable respawn place when dead)
 - Fast backup fully server files
 - Prism
 - Bring a commnad that can open player's inventory (prism)
