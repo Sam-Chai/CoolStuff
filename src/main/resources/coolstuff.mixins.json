@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "link.botwmcs.samchai.coolstuff.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "coolstuff.refmap.json",
+  "mixins": [
+    "sleepskiptime.SleepOverrideMixin",
+    "sleepskiptime.ServerLevelMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
