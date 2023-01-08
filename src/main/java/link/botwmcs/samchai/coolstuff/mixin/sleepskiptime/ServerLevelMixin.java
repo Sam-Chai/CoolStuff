@@ -3,6 +3,7 @@ package link.botwmcs.samchai.coolstuff.mixin.sleepskiptime;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -93,7 +94,9 @@ public abstract class ServerLevelMixin extends Level {
         if (sleepingPercentage < playersRequiredToSleepPercentage) {
             for (ServerPlayer player : players) {
                 // this chat need i18n.
-                player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping... " + playersRequiredToSleep + "/" + playerCount + " players are required to sleep through the night."), true);
+                var requiredSleepingText = new TranslatableComponent("chat.botwmcs_coolstuff.sleepskiptime.required_sleeping", (sleepingPlayerCount + "/" + playerCount), (playersRequiredToSleep + "/" + playerCount));
+                player.displayClientMessage(Component.nullToEmpty(requiredSleepingText.getString()), true);
+                // player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping... " + playersRequiredToSleep + "/" + playerCount + " players are required to sleep through the night."), true);
             }
             return;
         }
@@ -126,12 +129,16 @@ public abstract class ServerLevelMixin extends Level {
             for (ServerPlayer player : players) {
                 // msg need i18n
                 if (serverLevelData.isThundering()) {
-                    player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping through this thunderstorm (time until dawn: " + secondsUntilAwake + "s)"), true);
+                    var sleepingThroughThunderstormText = new TranslatableComponent("chat.botwmcs_coolstuff.sleepskiptime.sleeping_through_thunderstorm", (sleepingPlayerCount + "/" + playerCount), (secondsUntilAwake));
+                    player.displayClientMessage(Component.nullToEmpty(sleepingThroughThunderstormText.getString()), true);
+                    // player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping through this thunderstorm (time until dawn: " + secondsUntilAwake + "s)"), true);
                     if (config.sleepSkipTimeConfig.enableSleepingStatusLog) {
                         LOGGER.info("[BotWMCS CollStuff - SleepSkipTime] " + sleepingPlayerCount + "/" + playerCount + " players are sleeping through this thunderstorm (time until dawn: " + secondsUntilAwake + "s)");
                     }
                 } else {
-                    player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping through this night (time until dawn: " + secondsUntilAwake + "s)"), true);
+                    var sleepingThroughNightText = new TranslatableComponent("chat.botwmcs_coolstuff.sleepskiptime.sleeping_through_night", (sleepingPlayerCount + "/" + playerCount), (secondsUntilAwake));
+                    player.displayClientMessage(Component.nullToEmpty(sleepingThroughNightText.getString()), true);
+                    // player.displayClientMessage(Component.nullToEmpty(sleepingPlayerCount + "/" + playerCount + " players are sleeping through this night (time until dawn: " + secondsUntilAwake + "s)"), true);
                     if (config.sleepSkipTimeConfig.enableSleepingStatusLog) {
                         LOGGER.info("[BotWMCS CollStuff - SleepSkipTime] " + sleepingPlayerCount + "/" + playerCount + " players are sleeping through this night (time until dawn: " + secondsUntilAwake + "s)");
 
@@ -152,7 +159,9 @@ public abstract class ServerLevelMixin extends Level {
 
             for (ServerPlayer player : players) {
                 // i18n plz
-                player.displayClientMessage(Component.nullToEmpty("...Times to dawn..."), true);
+                var timesToDawnText = new TranslatableComponent("chat.botwmcs_coolstuff.sleepskiptime.times_to_dawn", (sleepingPlayerCount + "/" + playerCount), (secondsUntilAwake));
+                player.displayClientMessage(Component.nullToEmpty(timesToDawnText.getString()), true);
+                // player.displayClientMessage(Component.nullToEmpty("...Times to dawn..."), true);
                 if (config.sleepSkipTimeConfig.enableSleepingStatusLog) {
                     LOGGER.info("[BotWMCS CollStuff - SleepSkipTime] ...Times to dawn...");
                 }

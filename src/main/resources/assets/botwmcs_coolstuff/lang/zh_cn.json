@@ -1,0 +1,6 @@
+{
+    "chat.botwmcs_coolstuff.sleepskiptime.required_sleeping": "§f{0} §7玩家正在睡觉... §7仍需 §f{1} §7位玩家睡觉才能开始夜晚加速",
+    "chat.botwmcs_coolstuff.sleepskiptime.sleeping_through_thunderstorm": "§f{0} §7位玩家正在通过睡觉跳过雷暴 (还剩: §f{1}§7秒)",
+    "chat.botwmcs_coolstuff.sleepskiptime.sleeping_through_night": "§f{0} §7位玩家正在通过睡觉跳过夜晚 (还剩: §f{1}§7秒)",
+    "chat.botwmcs_coolstuff.sleepskiptime.times_to_dawn": "§f夜晚加速完毕"
+}

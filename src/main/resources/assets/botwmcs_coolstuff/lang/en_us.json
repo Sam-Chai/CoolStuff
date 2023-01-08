@@ -1,0 +1,6 @@
+{
+    "chat.botwmcs_coolstuff.sleepskiptime.required_sleeping": "§f{0} §7players are sleeping... §f{1} §7players are required to sleep through the night.",
+    "chat.botwmcs_coolstuff.sleepskiptime.sleeping_through_thunderstorm": "§f{0} §7players are sleeping through this thunderstorm (time until dawn: §f{1}§7s)",
+    "chat.botwmcs_coolstuff.sleepskiptime.sleeping_through_night": "§f{0} §7players are sleeping through this night (time until dawn: §f{1}§7s)",
+    "chat.botwmcs_coolstuff.sleepskiptime.times_to_dawn": "§f...Times to wake up..."
+}
