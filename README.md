@@ -11,6 +11,7 @@ Ready to do:
 - Share journey map
 - /head <player> command, that can give a player's head for ops.
 - @ support, can @ a player on chatscreen (@a for all, @s for self, @<player> for someone)
+- Multiple message sender (toast, title, bossbar, actionbar, and so on)
 
 Already have:
 - Sleep night warp
